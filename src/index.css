@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+body{
+/* background: linear-gradient(#030712);   */
+}
+
+.multicolor-border{
+  border-image: linear-gradient(to right, red, yellow, green, blue);
+  border-image-slice: 1;
+  animation: borderMove 3s linear infinite;
+}
+
+@keyframes borderMove{
+  0%{
+    border-image-source: linear-gradient(0deg, red, orange,yellow,green,blue,red);
+  }
+  100%{
+    /* border-image-source: linear-gradient(360deg, red, orange, yellow, green, blue, red); */
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#about {
+  scroll-margin-top: 5rem; 
+}
+
+#contact,
+#feedback {
+  scroll-margin-top: 5rem;
+}
