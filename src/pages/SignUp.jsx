@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,42 +10,50 @@ export default function SignUp() {
     
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validate()) return;
 
-    try {
-      const res = await fetch("http://localhost:8000/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          // confirmPassword: formData.confirmPassword,
-        }),
+    fetch("http://localhost:8000/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      }),
+    })
+      .then((res) =>
+        res.json().then((data) => {
+          return { ok: res.ok, data };
+        })
+      )
+      .then(({ ok, data }) => {
+        if (!ok) {
+          setErrors({
+            general: data.error || data.message || "Registration failed.",
+          });
+          throw new Error(data.error || data.message);
+        }
+
+        alert("Student registered successfully!");
+        console.log("Saved student:", data);
+
+        setSuccess(true);
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      })
+
+      .catch((err) => {
+        console.error("Error:", err);
+        setErrors({
+          general: err.message || "Something went wrong. Try again.",
+        });
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setErrors({ ...errors, general: data.message });
-        return;
-      }
-
-      setSuccess(true);
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 1200);
-
-    } catch (error) {
-      console.error(error);
-      setErrors({ general: "Something went wrong. Try again." });
-    }
   };
-
 
   const [formData, setFormData] = useState({
     name: "",
@@ -67,17 +74,31 @@ export default function SignUp() {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
+
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required.";
+    } else if (formData.name.trim().length < 3) {
+      newErrors.name = "Name must be at least 3 characters.";
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email || !emailRegex.test(formData.email))
+    if (!emailRegex.test(formData.email)) {
       newErrors.email = "Please enter a valid email address.";
-    if (!formData.password || formData.password.length < 6)
+    }
+
+    if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters long.";
-    if (formData.password !== formData.confirmPassword)
+    }
+
+    if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
+  
 
 
   const isFormValid =

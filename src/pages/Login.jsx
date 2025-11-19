@@ -32,40 +32,45 @@ export default function Login() {
   };
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  if (!validate()) return;
+    if (!validate()) return;
 
-  try {
-    const res = await fetch("http://localhost:8000/auth/login", {
+    fetch("http://localhost:8000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         email: formData.email,
         password: formData.password,
       }),
-    });
+    })
+      .then((res) => {
+        return res.json().then((data) => {
+          return { ok: res.ok, data };
+        });
+      })
+      .then(({ ok, data }) => {
+        if (!ok) {
+          setErrors({ general: data.message || "Invalid login details." });
+          return;
+        }
 
-    const data = await res.json();
+        localStorage.setItem("token", data.data.token);
 
-    if (!res.ok) {
-      setErrors({ ...errors, general: data.message });
-      return;
-    }
-    localStorage.setItem("token", data.data.token);
+        setSuccess(true);
 
-    setSuccess(true);
-
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1000);
-
-  } catch (error) {
-    console.error(error);
-    setErrors({ general: "Something went wrong, try again." });
-  }
-};
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
+      })
+      
+      .catch((err) => {
+        console.error("Error:", err);
+        setErrors({ general: "Something went wrong. Try again." });
+      });
+  };
+  
 
   const isFormValid =
     formData.email &&
