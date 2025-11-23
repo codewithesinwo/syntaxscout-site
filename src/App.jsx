@@ -17,10 +17,12 @@ import Stats from './components/Stats'
 import ContactForm from './pages/ContactForm'
 import LifetimeAccess from './pages/LifetimeAccess'
 import DashboardCourses from './pages/DashboardCourses'
+import { getToken } from "./utils/localstorage";
 
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const token = getToken();
 
   useEffect(() => {
     if (location.hash) {
@@ -39,7 +41,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      const isLoggedIn = localStorage.getItem("isLoggedIn");
+      const isLoggedIn = ("isLoggedIn");
       if (isLoggedIn === "true") {
 
         const publicPaths = ["/login", "/signup", "/reset-password"];

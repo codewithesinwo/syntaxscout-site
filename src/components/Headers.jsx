@@ -5,11 +5,11 @@ import { NavLink, Link } from "react-router-dom";
 
 const navLinks = [
   { name: "Courses", href: "/courses" },
-  { name: "Leaning Paths", href: "/leaning-paths" },
-  { name: "Lifetime Access", href: "/lifetime-access" },
-  // { name: "Forum", href: "/forum" },
+  { name: "Paths", href: "/leaning-paths" },
+  { name: "Access", href: "/lifetime-access" },
   { name: "Contact", href: "/contact" },
 ];
+
 
 
 export default function Header() {
@@ -22,7 +22,7 @@ export default function Header() {
         <Link to="/">
           <div className="flex items-center justify-center space-x-2">
             <img
-              src="/GbyteTechnologiesLogo.png"
+              src="/Syntaxscout-logo.png"
               alt="Logo"
               className="h-8 w-auto"
             />

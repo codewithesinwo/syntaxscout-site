@@ -22,7 +22,7 @@ export default function About() {
         <section className="flex flex-col md:flex-row items-center gap-8 mb-12">
           <div className="w-full md:w-1/2">
             <img
-              src="/GbyteTechnologiesLogo.png"
+              src="/Syntaxscout-logo.png"
               alt="Syntax Scout students collaborating on a project"
               className="w-full h-80 md:h-full object-cover rounded-lg shadow-lg border"
             />

@@ -7,7 +7,7 @@ export default function DashboardLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const isLoggedIn = ("isLoggedIn");
     if (!isLoggedIn) {
       navigate("/");
     }

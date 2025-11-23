@@ -10,7 +10,7 @@ import { IoSettings } from "react-icons/io5";
 import {
   FaGoodreads,
   FaUserLock,
-  FaBars,
+  // FaBars,
 } from "react-icons/fa";
 
 

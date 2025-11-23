@@ -97,9 +97,6 @@ export default function SignUp() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
-  
-
 
   const isFormValid =
     formData.name &&
@@ -119,7 +116,7 @@ export default function SignUp() {
         <div className="flex flex-col items-center">
           <div className="p-2 bg-blue-100 rounded-full dark:bg-blue-900/50">
             <img
-              src="/public/GbyteTechnologiesLogo.png"
+              src="/public/Syntaxscout-logo.png"
               alt="Logo"
               className="w-20 h-20"
             />

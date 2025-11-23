@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Logo from "../assets/GbyteTechnologiesLogo.png";
+import Logo from "../assets/Syntaxscout-logo.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdCloseCircle } from "react-icons/io";
 import { NavLink, Link } from "react-router-dom";

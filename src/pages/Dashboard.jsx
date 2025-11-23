@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  FaPlayCircle,
+  // FaPlayCircle,
   FaCheckCircle,
   FaCalendarPlus,
   FaStar,
@@ -185,6 +185,7 @@ export default function Dashboard() {
           Welcome back! Ready to learn something new today?
         </p>
       </div>
+
       {/* CATEGORIES */}
       <h2
         className={`${

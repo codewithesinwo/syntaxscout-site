@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import { setToken } from "../utils/localstorage";
 
 export default function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  // const isAuthenticated = true;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,7 +32,6 @@ export default function Login() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,21 +57,21 @@ export default function Login() {
           return;
         }
 
-        localStorage.setItem("token", data.data.token);
+        const token = data?.data?.token;
+        if (token) {
+          setToken(token);
+        }
 
         setSuccess(true);
 
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1500);
+        navigate("/dashboard", { replace: true, state: { token } });
       })
-      
+
       .catch((err) => {
         console.error("Error:", err);
         setErrors({ general: "Something went wrong. Try again." });
       });
   };
-  
 
   const isFormValid =
     formData.email &&
@@ -79,7 +80,6 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-[url('/BackendDevelopment.webp')] bg-cover bg-center">
-      
       <motion.div
         className="mt-20 mb-5 w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-2xl dark:bg-gray-800"
         initial={{ opacity: 0, y: 50 }}
@@ -89,7 +89,7 @@ export default function Login() {
         <div className="flex flex-col items-center">
           <div className="p-2 bg-blue-100 rounded-full dark:bg-blue-900/50">
             <img
-              src="/public/GbyteTechnologiesLogo.png"
+              src="/public/Syntaxscout-logo.png"
               alt="Logo"
               className="w-20 h-20"
             />
@@ -167,15 +167,15 @@ export default function Login() {
             )}
           </div>
 
-            <motion.button
-              type="submit"
-              disabled={!isFormValid}
-              className="w-full px-4 py-3 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Log In
-            </motion.button>
+          <motion.button
+            type="submit"
+            disabled={!isFormValid}
+            className="w-full px-4 py-3 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Log In
+          </motion.button>
 
           {success && (
             <p className="text-sm text-center text-green-600 dark:text-green-400">
