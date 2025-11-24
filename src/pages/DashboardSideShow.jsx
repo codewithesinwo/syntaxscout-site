@@ -3,19 +3,18 @@ import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import { BiSolidDashboard, BiSolidMessageAltDetail } from "react-icons/bi";
-import { LuPanelRightOpen, LuPanelLeftOpen } from "react-icons/lu";
+import { VscLayoutSidebarLeft } from "react-icons/vsc";
 import { SiDiscourse } from "react-icons/si";
 import { MdAssignmentAdd } from "react-icons/md";
 import { IoSettings } from "react-icons/io5";
 import {
   FaGoodreads,
   FaUserLock,
-  // FaBars,
 } from "react-icons/fa";
-
 
 export default function DashboardSideShow() {
   const [isOpen, setIsOpen] = useState(true);
+  const [isHovering, setIsHovering] = useState(false);
   const { darkMode } = useTheme();
 
   const menu = [
@@ -42,17 +41,29 @@ export default function DashboardSideShow() {
       } text-white flex-col items-center py-6 shadow-lg ${
         isOpen ? "w-60" : "w-20"
       } duration-300 transition-colors`}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
       {/* Toggle Button */}
-      <div
-        className={`${
-          darkMode
-            ? "text-4xl text-white cursor-pointer self-start ml-3 mt-15"
-            : "text-4xl text-black cursor-pointer self-start ml-3 mt-15"
-        }`}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? <LuPanelRightOpen /> : <LuPanelLeftOpen />}
+      <div className="flex items-center justify-between w-full px-3 mt-15">
+        <div>
+          <img src="/Syntaxscout-logo.png" alt="Logo" className="w-10 h-10" />
+        </div>
+        {(isOpen || isHovering) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className={`${
+              darkMode
+                ? "text-2xl text-white cursor-pointer"
+                : "text-2xl text-black cursor-pointer"
+            }`}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <VscLayoutSidebarLeft /> : <VscLayoutSidebarLeft />}
+          </motion.div>
+        )}
       </div>
 
       {/* Logo */}
@@ -65,7 +76,6 @@ export default function DashboardSideShow() {
       >
         Dashboard
       </motion.h3>
-
 
       {/* Menu */}
       <div className="w-full px-3 mt-5 space-y-2 flex-none">

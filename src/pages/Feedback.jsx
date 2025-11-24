@@ -1,6 +1,27 @@
 import React from "react";
-import useFeedbacks from "../../localstorage";
 import { motion as Motion } from "framer-motion";
+
+// simple localStorage hook used by this component
+function useLocalStorage(key, initialValue) {
+  const [state, setState] = React.useState(() => {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : initialValue;
+    } catch {
+      return initialValue;
+    }
+  });
+
+  React.useEffect(() => {
+    try {
+      localStorage.setItem(key, JSON.stringify(state));
+    } catch {
+      // ignore
+    }
+  }, [key, state]);
+
+  return [state, setState];
+}
 
 export default function Feedback({ id }) {
   // Format a Date object to numeric 'DD/MM/YYYY' (e.g. '17/10/2025')
@@ -191,9 +212,7 @@ export default function Feedback({ id }) {
     }
   ];
 
- 
-
-  const [feedbacks, setFeedbacks] = useFeedbacks(defaultFeedback);
+  const [feedbacks, setFeedbacks] = useLocalStorage("feedbacks", defaultFeedback);
 
   const handleRatingChange = (rating) => {
     setFormData((prev) => ({ ...prev, rating }));

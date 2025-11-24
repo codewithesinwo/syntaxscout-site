@@ -89,7 +89,7 @@ export default function Login() {
         <div className="flex flex-col items-center">
           <div className="p-2 bg-blue-100 rounded-full dark:bg-blue-900/50">
             <img
-              src="/public/Syntaxscout-logo.png"
+              src="/Syntaxscout-logo.png"
               alt="Logo"
               className="w-20 h-20"
             />

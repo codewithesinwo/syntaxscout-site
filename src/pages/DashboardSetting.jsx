@@ -53,6 +53,26 @@ export default function DashboardSetting() {
     timezone: "UTC-5",
   });
 
+  const [coursePurchaseData, setCoursePurchaseData] = useState({
+    purchasedCourses: [
+      {
+        id: 1,
+        title: "React Basics",
+        price: 49.99,
+        purchased: true,
+        date: "2024-01-15",
+      },
+      {
+        id: 2,
+        title: "Advanced JavaScript",
+        price: 79.99,
+        purchased: true,
+        date: "2024-02-20",
+      },
+    ],
+    cartItems: [],
+  });
+
   const [activeSection, setActiveSection] = useState("profile");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -746,6 +766,77 @@ export default function DashboardSetting() {
                             }))
                           )}
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeSection === "course-purchase" && (
+                  <div>
+                    <h2
+                      className={`text-2xl font-semibold mb-6 ${
+                        darkMode ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      Courses Purchase
+                    </h2>
+                    <div className="space-y-8">
+                      {/* Purchased Courses Section */}
+                      <div>
+                        <h3
+                          className={`text-lg font-semibold mb-4 ${
+                            darkMode ? "text-gray-200" : "text-gray-800"
+                          }`}
+                        >
+                          My Purchased Courses
+                        </h3>
+                        {coursePurchaseData.purchasedCourses.length > 0 ? (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {coursePurchaseData.purchasedCourses.map((course) => (
+                              <div
+                                key={course.id}
+                                className={`p-4 rounded-lg border-2 border-green-500 ${
+                                  darkMode ? "bg-neutral-800" : "bg-green-50"
+                                }`}
+                              >
+                                <div className="flex items-start justify-between mb-2">
+                                  <h4
+                                    className={`font-semibold text-lg ${
+                                      darkMode ? "text-white" : "text-gray-900"
+                                    }`}
+                                  >
+                                    {course.title}
+                                  </h4>
+                                  <FaCheck className="text-green-500 text-xl" />
+                                </div>
+                                <p
+                                  className={`text-sm mb-3 ${
+                                    darkMode ? "text-gray-400" : "text-gray-600"
+                                  }`}
+                                >
+                                  Purchased on: {course.date}
+                                </p>
+                                <button
+                                  className={`w-full px-4 py-2 rounded-md font-medium transition-colors ${
+                                    darkMode
+                                      ? "bg-amber-500 text-black hover:bg-amber-600"
+                                      : "bg-amber-400 text-gray-900 hover:bg-amber-500"
+                                  }`}
+                                >
+                                  Continue Learning
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p
+                            className={`text-center py-6 ${
+                              darkMode ? "text-gray-400" : "text-gray-500"
+                            }`}
+                          >
+                            No purchased courses yet.
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -17,12 +17,14 @@ import Stats from './components/Stats'
 import ContactForm from './pages/ContactForm'
 import LifetimeAccess from './pages/LifetimeAccess'
 import DashboardCourses from './pages/DashboardCourses'
-import { getToken } from "./utils/localstorage";
+import Path from './pages/Path'
+import DashboardGrade from './pages/DashboardGrade'
+import DashboardAssignment from './pages/DashboardAssignment'
+import DashboardMessage from './pages/DashboardMessage'
 
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
-  const token = getToken();
 
   useEffect(() => {
     if (location.hash) {
@@ -39,24 +41,6 @@ export default function App() {
     }
   }, [location, navigate]);
 
-  useEffect(() => {
-    try {
-      const isLoggedIn = ("isLoggedIn");
-      if (isLoggedIn === "true") {
-
-        const publicPaths = ["/login", "/signup", "/reset-password"];
-        if (publicPaths.includes(location.pathname)) {
-          navigate("/dashboard");
-        }
-      } else {
-        if (location.pathname.startsWith("/dashboard")) {
-          navigate("/");
-        }
-      }
-    } catch {
-        console.log("Start Guided");
-    }
-  }, [location.pathname, navigate]);
 
   return (
     <ThemeProvider>
@@ -76,6 +60,7 @@ export default function App() {
           />
 
           <Route path="/lifetime-access" element={<LifetimeAccess />} />
+          <Route path="/leaning-paths" element={<Path />} />
           <Route path="/contact" element={<ContactForm />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/login" element={<Login />} />
@@ -87,6 +72,10 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="settings" element={<DashboardSetting />} />
           <Route path="courses" element={<DashboardCourses />} />
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="grades" element={<DashboardGrade />} />
+          <Route path="assignments" element={<DashboardAssignment />} />
+          <Route path="messages" element={<DashboardMessage />} />
         </Route>
       </Routes>
     </ThemeProvider>

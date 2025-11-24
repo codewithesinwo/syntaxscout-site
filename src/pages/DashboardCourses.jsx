@@ -99,7 +99,6 @@ export default function DashboardCourses() {
       duration: "36h",
       image: "/cybersecurity.png",
     },
-    // Add these to your courses array (they match your card format):
 
     {
       id: 11,
@@ -194,55 +193,54 @@ export default function DashboardCourses() {
 
 
   return (
-    <div
-      className={
-        darkMode
-          ? "bg-black min-h-screen text-white"
-          : "bg-white min-h-screen text-black"
-      }
-    >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course) => (
-          <div
-            key={course.id}
-            className="bg-[#0D0D0D] p-4 rounded-xl w-full border border-[#1a1a1a] shadow-lg"
-          >
-            <div className="rounded-lg overflow-hidden bg-black">
-              <img
-                src={course.image}
-                alt={course.title}
-                className="w-full h-40 object-cover"
-              />
-            </div>
-
-            <div className="mt-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-white text-lg font-semibold leading-tight">
-                  {course.title}
-                </h3>
-
-                <span className="text-sm bg-[#2A2A2A] text-white px-3 py-1 rounded-md">
-                  {course.duration}
-                </span>
+    <>
+      <div
+        className={`p-6 mt-15 py-10 ${darkMode ? 'bg-black' : 'bg-gray-100'} min-h-screen`
+        }
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {courses.map((course) => (
+            <div
+              key={course.id}
+              className="bg-[#0D0D0D] p-4 rounded-xl w-full border border-[#1a1a1a] shadow-lg "
+            >
+              <div className="rounded-lg overflow-hidden bg-black">
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  className="w-full h-40 object-cover"
+                />
               </div>
 
-              <p className="text-gray-400 text-sm mt-2 leading-snug">
-                {course.desc}
-              </p>
+              <div className="mt-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-white text-lg font-semibold leading-tight">
+                    {course.title}
+                  </h3>
 
-              <div className="mt-4 flex items-center gap-3">
-                <span className="text-white font-bold text-lg">
-                  {course.price}
-                </span>
+                  <span className="text-sm bg-[#2A2A2A] text-white px-3 py-1 rounded-md">
+                    {course.duration}
+                  </span>
+                </div>
 
-                <span className="text-gray-500 line-through text-sm">
-                  {course.oldPrice}
-                </span>
+                <p className="text-gray-400 text-sm mt-2 leading-snug">
+                  {course.desc}
+                </p>
+
+                <div className="mt-4 flex items-center gap-3">
+                  <span className="text-white font-bold text-lg">
+                    {course.price}
+                  </span>
+
+                  <span className="text-gray-500 line-through text-sm">
+                    {course.oldPrice}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
