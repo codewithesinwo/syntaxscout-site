@@ -4,11 +4,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 
 
+
+
+
 export default function SignUp() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
     const [errors, setErrors] = useState({});
     const [success, setSuccess] = useState(false);
-    
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,7 +29,8 @@ export default function SignUp() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: formData.name,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email,
         password: formData.password,
       }),
@@ -55,14 +66,6 @@ export default function SignUp() {
       });
   };
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,10 +78,16 @@ export default function SignUp() {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required.";
-    } else if (formData.name.trim().length < 3) {
-      newErrors.name = "Name must be at least 3 characters.";
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "Firstname is required.";
+    } else if (formData.firstName.trim().length < 3) {
+      newErrors.firstName = "Lastname must be at least 3 characters.";
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Lastname is required.";
+    } else if (formData.lastName.trim().length < 3) {
+      newErrors.lastName = "Lastname must be at least 3 characters.";
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -98,15 +107,8 @@ export default function SignUp() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const isFormValid =
-    formData.name &&
-    formData.email &&
-    formData.password &&
-    formData.confirmPassword &&
-    Object.values(errors).every((error) => !error);
-
   return (
-    <div className="flex items-center justify-center p-4 bg-[url('/BackendDevelopment.webp')] bg-cover bg-center min-h-screen">
+    <div className="flex items-center justify-center pt-25 pb-5 bg-[url('/BackendDevelopment.webp')] bg-cover bg-center min-h-screen">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -115,11 +117,7 @@ export default function SignUp() {
       >
         <div className="flex flex-col items-center">
           <div className="p-2 bg-blue-100 rounded-full dark:bg-blue-900/50">
-            <img
-              src="/Syntaxscout-logo.png"
-              alt="Logo"
-              className="w-20 h-20"
-            />
+            <img src="/Syntaxscout-logo.png" alt="Logo" className="w-20 h-20" />
           </div>
         </div>
         <div className="text-center">
@@ -132,43 +130,78 @@ export default function SignUp() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          <div>
-            <label
-              htmlFor="name"
-              className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 text-gray-900 bg-gray-100 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 ${
-                errors.name
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 dark:border-gray-500 focus:ring-blue-500"
-              }`}
-              placeholder="Enter your name"
-              aria-describedby={errors.name ? "name-error" : undefined}
-            />
-            {errors.name && (
-              <p
-                id="name-error"
-                className="mt-1 text-xs text-red-500"
-                role="alert"
+          <div className="flex gap-5">
+            <div>
+              <label
+                htmlFor="firstName"
+                className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
               >
-                {errors.name}
-              </p>
-            )}
+                First Name <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                className={`w-full px-3 py-2 text-gray-900 bg-gray-100 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 ${
+                  errors.firstName
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 dark:border-gray-500 focus:ring-blue-500"
+                }`}
+                placeholder="Enter your firstname"
+                aria-describedby={errors.firstName ? "firstName-error" : undefined}
+              />
+              {errors.firstName && (
+                <p
+                  id="firstName-error"
+                  className="mt-1 text-xs text-red-500"
+                  role="alert"
+                >
+                  {errors.firstName}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="lastName"
+                className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
+                Last Name <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="text"
+                id="lastname"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                className={`w-full px-3 py-2 text-gray-900 bg-gray-100 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:outline-none focus:ring-2 ${
+                  errors.lastName
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 dark:border-gray-500 focus:ring-blue-500"
+                }`}
+                placeholder="Enter your lastname"
+                aria-describedby={errors.lastName ? "lastName-error" : undefined}
+              />
+              {errors.lastName && (
+                <p
+                  id="lastName-error"
+                  className="mt-1 text-xs text-red-500"
+                  role="alert"
+                >
+                  {errors.lastName}
+                </p>
+              )}
+            </div>
           </div>
+
           <div>
             <label
               htmlFor="email"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              Email
+              Email <span className="text-red-400">*</span>
             </label>
             <input
               type="email"
@@ -199,7 +232,7 @@ export default function SignUp() {
               htmlFor="password"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              Password
+              Password <span className="text-red-400">*</span>
             </label>
             <input
               type="password"
@@ -230,7 +263,7 @@ export default function SignUp() {
               htmlFor="confirmPassword"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              Confirm password
+              Confirm password <span className="text-red-400">*</span>
             </label>
             <input
               type="password"
@@ -261,7 +294,6 @@ export default function SignUp() {
 
           <button
             type="submit"
-            disabled={!isFormValid}
             className="w-full px-4 py-3 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
           >
             Sign Up
@@ -277,7 +309,9 @@ export default function SignUp() {
             </motion.p>
           )}
           {errors.general && (
-            <p className="text-sm text-center text-red-600 dark:text-red-400 mt-2">{errors.general}</p>
+            <p className="text-sm text-center text-red-600 dark:text-red-400 mt-2">
+              {errors.general}
+            </p>
           )}
         </form>
 

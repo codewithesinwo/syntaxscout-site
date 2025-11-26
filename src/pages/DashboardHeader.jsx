@@ -9,12 +9,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { name: "Dashboard", href: "/dashboard" },
-  { name: "All Courses", href: "/courses" },
-  { name: "Assignment", href: "/assignments" },
-  { name: "Grades", href: "/grades" },
-  { name: "Messages", href: "/messages" },
-  { name: "Settings", href: "/settings" },
-  { name: "Log out", href: "/logout" },
+  { name: "All Courses", href: "/dashboard/courses" },
+  { name: "Assignment", href: "/dashboard/assignments" },
+  { name: "Grades", href: "/dashboard/grades" },
+  { name: "Messages", href: "/dashboard/messages" },
+  { name: "Settings", href: "/dashboard/settings" },
 ];
 
 export default function DashboardHeader() {
@@ -33,7 +32,13 @@ export default function DashboardHeader() {
       <Link to="/">
         <div className="flex items-center gap-2">
           <img src={Logo} alt="Logo" className="h-8 w-auto" />
-          <span className={`${darkMode ? "font-bold text-xl text-gray-100 hidden md:inline" : "font-bold text-xl text-gray-900 hidden md:inline"}`}>
+          <span
+            className={`${
+              darkMode
+                ? "font-bold text-xl text-gray-100 hidden md:inline"
+                : "font-bold text-xl text-gray-900 hidden md:inline"
+            }`}
+          >
             Syntax Scout
           </span>
         </div>
@@ -57,38 +62,18 @@ export default function DashboardHeader() {
             } focus:ring-2 focus:ring-amber-500 outline-none w-64 transition-colors duration-300`}
           />
         </div>
-
-        <div className="relative">
-          <FaFilter
-            className={`absolute left-3 top-1/2 -translate-y-1/2 ${
-              darkMode ? "text-gray-400" : "text-gray-500"
-            }`}
-          />
-          <select
-            className={`pl-9 pr-3 py-2 rounded-lg border ${
-              darkMode
-                ? "bg-neutral-800 border-2 border-gray-100 text-gray-100"
-                : "bg-white border-gray-300 text-gray-800"
-            } focus:ring-2 focus:ring-amber-500 outline-none w-40 appearance-none transition-colors duration-300`}
-          >
-            <option>All levels</option>
-            <option>Beginner</option>
-            <option>Intermediate</option>
-            <option>Advanced</option>
-          </select>
-        </div>
-
-        <button
-          onClick={toggleDarkMode}
-          className={`p-2 rounded-lg ${
-            darkMode
-              ? "text-amber-400 hover:bg-gray-800 border"
-              : "text-gray-600 hover:bg-amber-200 border"
-          } transition-colors duration-300`}
-        >
-          {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
-        </button>
       </div>
+
+      <button
+        onClick={toggleDarkMode}
+        className={`p-2 rounded-lg ${
+          darkMode
+            ? "text-amber-400 hover:bg-gray-800 border"
+            : "text-gray-600 hover:bg-amber-200 border"
+        } transition-colors duration-300`}
+      >
+        {darkMode ? <FaSun size={20} /> : <FaMoon size={20} />}
+      </button>
 
       {/* Mobile menu button */}
       <button
@@ -118,6 +103,9 @@ export default function DashboardHeader() {
                 {link.name}
               </NavLink>
             ))}
+            <button className="cursor-pointer hover:text-amber-400">
+              Logout
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

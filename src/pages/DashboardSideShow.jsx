@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import { BiSolidDashboard, BiSolidMessageAltDetail } from "react-icons/bi";
@@ -11,11 +11,13 @@ import {
   FaGoodreads,
   FaUserLock,
 } from "react-icons/fa";
+import { removeToken } from "../utils/localstorage";
 
 export default function DashboardSideShow() {
   const [isOpen, setIsOpen] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const { darkMode } = useTheme();
+const navigate=useNavigate()
 
   const menu = [
     { to: "/dashboard", icon: BiSolidDashboard, label: "Dashboard" },
@@ -28,8 +30,12 @@ export default function DashboardSideShow() {
       icon: IoSettings,
       label: "Settings",
     },
-    { to: "/logout", icon: FaUserLock, label: "Log out" },
   ];
+
+  function handleLogout(){
+    navigate('/')
+    removeToken()
+  }
 
   return (
     <motion.div
@@ -40,7 +46,7 @@ export default function DashboardSideShow() {
         darkMode ? "bg-black border-r-2" : "bg-gray-200"
       } text-white flex-col items-center py-6 shadow-lg ${
         isOpen ? "w-60" : "w-20"
-      } duration-300 transition-colors`}
+      } duration-900 transition-colors`}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
@@ -108,6 +114,26 @@ export default function DashboardSideShow() {
             </motion.div>
           );
         })}
+        <motion.div
+          initial={{ opacity: 0, x: -15 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 6 * 0.05 }}
+        >
+          <NavLink
+            to={"/"}
+            onClick={handleLogout}
+            className={`flex items-center gap-4 p-3 rounded-md font-semibold transition-all duration-300 ${
+              darkMode
+                ? "text-white hover:bg-gray-500"
+                : !darkMode
+                ? "text-black  hover:bg-gray-500"
+                : ""
+            }`}
+          >
+            <FaUserLock className="text-xl text-center " />
+            {isOpen && <span>Logout</span>}
+          </NavLink>
+        </motion.div>
       </div>
     </motion.div>
   );

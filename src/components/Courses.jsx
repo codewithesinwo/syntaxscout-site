@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
 import { Link } from "react-router-dom";
 
 export default function Courses({ limit }) {
@@ -348,7 +347,7 @@ export default function Courses({ limit }) {
               </motion.div>
             ))
           ) : (
-            <p className="col-span-full text-center text-white">
+            <p className="col-span-full text-center text-black">
               No courses found.
             </p>
           )}

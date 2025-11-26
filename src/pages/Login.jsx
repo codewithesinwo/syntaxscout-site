@@ -12,7 +12,6 @@ export default function Login() {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
-  // const isAuthenticated = true;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -88,11 +87,7 @@ export default function Login() {
       >
         <div className="flex flex-col items-center">
           <div className="p-2 bg-blue-100 rounded-full dark:bg-blue-900/50">
-            <img
-              src="/Syntaxscout-logo.png"
-              alt="Logo"
-              className="w-20 h-20"
-            />
+            <img src="/Syntaxscout-logo.png" alt="Logo" className="w-20 h-20" />
           </div>
         </div>
         <div className="text-center">
@@ -109,7 +104,7 @@ export default function Login() {
               htmlFor="email"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              Email
+              Email <span className="text-red-400">*</span>
             </label>
             <input
               type="email"
@@ -140,7 +135,7 @@ export default function Login() {
               htmlFor="password"
               className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              Password
+              Password <span className="text-red-400">*</span>
             </label>
             <input
               type="password"

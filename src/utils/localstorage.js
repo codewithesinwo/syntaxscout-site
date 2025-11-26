@@ -2,8 +2,7 @@ const TOKEN_KEY = "token";
 
 export function setToken(token) {
 	try {
-		sessionStorage.setItem(TOKEN_KEY, token);
-		localStorage.removeItem(TOKEN_KEY);
+		localStorage.setItem(TOKEN_KEY, token);
 	} catch (err) {
 		console.log(err);		
 	}

@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  // FaPlayCircle,
   FaCheckCircle,
   FaCalendarPlus,
   FaStar,
@@ -179,7 +178,7 @@ export default function Dashboard() {
               : "text-3xl font-bold text-gray-900"
           }`}
         >
-          Hello, Abasiubong! 👋
+          Hello, Abasubong! 👋
         </h1>
         <p className={`${darkMode ? "text-gray-100" : "text-gray-900"}`}>
           Welcome back! Ready to learn something new today?

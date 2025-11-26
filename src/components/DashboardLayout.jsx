@@ -1,17 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardHeader from "../pages/DashboardHeader";
 import DashboardSideShow from "../pages/DashboardSideShow";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 
 export default function DashboardLayout() {
-  const navigate = useNavigate();
+  const navigate=useNavigate() 
+
 
   useEffect(() => {
-    const isLoggedIn = ("isLoggedIn");
-    if (!isLoggedIn) {
+    const isLocalStorageToken = localStorage.getItem('token');
+    if (!isLocalStorageToken) {
       navigate("/");
     }
+
   }, [navigate]);
+
 
   return (
     <div className="grid grid-rows-[auto_1fr] h-screen overflow-hidden">
