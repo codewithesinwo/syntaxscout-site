@@ -334,7 +334,7 @@ export default function Feedback({ id }) {
 
               <div>
                 <label className="block text-sm font-medium mb-2 text-gray-300">
-                  feedback
+                  Feedback
                 </label>
                 <textarea
                   name="feedback"
@@ -379,7 +379,7 @@ export default function Feedback({ id }) {
               </p>
             ) : (
               
-              <div className="space-y-4 max-h-150 overflow-y-auto">
+              <div className="space-y-4 max-h-150 overflow-y-auto p-5">
                 {feedbacks.map((feedback) => (
                   <Motion.div
                     key={feedback.id}

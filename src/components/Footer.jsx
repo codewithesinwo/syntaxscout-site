@@ -13,16 +13,16 @@ export default function Footer() {
 
   return (
     <footer>
-      <div className="bg-gray-900 text-gray-300 py-2 md:flex justify-center items-center gap-20 ">
+      <div className="bg-gray-900 text-gray-300 py-4 md:flex justify-center items-center gap-20 ">
         <Link to="/">
           <div>
-            <p className="font-bold flex justify-center items-center mt-5">
+            <p className="font-bold flex justify-center items-center">
               &copy; Syntax Scout
             </p>
           </div>
         </Link>
 
-        <div className="md:flex gap-5 justify-center items-center flex mt-5">
+        <div className="md:flex gap-5 justify-center items-center flex">
           <div className="border p-2 rounded-full hover:bg-red-600 transition-all cursor-pointer">
             <a href="https://youtube.com/codewithesinwo" target="_blank">
               <FaYoutube />
@@ -55,7 +55,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex gap-5.5 justify-center items-center mt-5">
+        <div className="flex gap-5.5 justify-center items-center">
           <p>Terms os Use</p>
           <p>Privacy Policy</p>
         </div>

@@ -67,14 +67,15 @@ export default function Path() {
 
   return (
     <>
-      <section className="bg-gradient-to-b from-white to-gray-100 py-16">
+      <section className="bg-gray-950 py-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+            <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-[#7c3aed] to-[#e879f9] inline-block text-transparent bg-clip-text leading-tight">
               Learning Path
             </h2>
-            <p className="mt-3 text-gray-600 max-w-2xl mx-auto">
-              A practical, step-by-step curriculum designed to take you from fundamentals to production-ready engineering.
+            <p className="mt-3 text-gray-100 max-w-2xl mx-auto">
+              A practical, step-by-step curriculum designed to take you from
+              fundamentals to production-ready engineering.
             </p>
           </div>
 
@@ -85,17 +86,16 @@ export default function Path() {
             variants={container}
             className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {steps.map(step => (
+            {steps.map((step) => (
               <motion.article
                 key={step.id}
                 variants={card}
                 whileHover="hover"
-                className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-lg focus-within:ring-2 focus-within:ring-blue-200 transition-transform"
+                className="bg-gray-900 rounded-2xl overflow-hidden border border-neutral-950 shadow-sm hover:shadow-lg focus-within:ring-2 focus-within:ring-blue-200 transition-transform"
                 tabIndex={0}
                 role="group"
                 aria-labelledby={`step-${step.id}`}
               >
-
                 <div className="relative h-40 md:h-44 lg:h-40">
                   <img
                     src={step.image}
@@ -113,22 +113,27 @@ export default function Path() {
                 </div>
 
                 <div className="pt-8 px-6 pb-6">
-                  <h3 id={`step-${step.id}`} className="text-lg font-semibold text-gray-900">
-                    {step.title.replace(/^\d+\.\s*/, '')}
+                  <h3
+                    id={`step-${step.id}`}
+                    className="text-lg font-semibold text-gray-900"
+                  >
+                    {step.title.replace(/^\d+\.\s*/, "")}
                   </h3>
-                  <p className="mt-2 text-sm text-gray-600">{step.about}</p>
+                  <p className="mt-2 text-sm text-gray-100">{step.about}</p>
 
-                  <ul className="mt-4 text-sm text-gray-700 list-disc list-inside space-y-1">
+                  <ul className="mt-4 text-sm text-gray-100 list-disc list-inside space-y-1">
                     {step.bullets.map((b, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <span className="mt-0.5 text-gray-400">•</span>
+                        <span className="mt-0.5 text-gray-100">•</span>
                         <span>{b}</span>
                       </li>
                     ))}
                   </ul>
 
                   <div className="mt-5 flex items-center justify-between">
-                    <span className="text-xs text-gray-500">Stage {step.id}</span>
+                    <span className="text-xs text-gray-100">
+                      Stage {step.id}
+                    </span>
                     <button
                       type="button"
                       className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
@@ -144,5 +149,5 @@ export default function Path() {
         </div>
       </section>
     </>
-  )
+  );
 }

@@ -5,7 +5,6 @@ const ContactForm = ({ id }) => {
     name: "",
     email: "",
     phone: "",
-    // subject: "General Inquiry",
     message: "",
   });
 
@@ -49,9 +48,9 @@ const ContactForm = ({ id }) => {
     // accept optional id so the section can be targeted via hash
     <div
       id={id}
-      className="flex justify-center items-center bg-gray-900 min-h-screen p-4"
+      className="flex justify-center items-center bg-gray-950 min-h-screen p-4"
     >
-      <section className="bg-gray-200/10 rounded-2xl shadow-lg p-8 w-full max-w-2xl mx-auto my-25 border border-gray-100">
+      <section className="bg-gray-900/10 rounded-2xl shadow-lg p-8 w-full max-w-2xl mx-auto my-25 border border-gray-100">
         <h2 className="text-3xl font-semibold text-gray-100 mb-6 text-center">
           Contact Us
         </h2>
@@ -101,24 +100,6 @@ const ContactForm = ({ id }) => {
               className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 text-white outline-none"
             />
           </div>
-
-          {/* Subject */}
-          {/* <div>
-            <label className="block text-gray-100 font-medium mb-2">
-              Subject
-            </label>
-            <select
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 text-white outline-none"
-            >
-              <option>General Inquiry</option>
-              <option>Partnership</option>
-              <option>Support</option>
-              <option>Feedback</option>
-            </select>
-          </div> */}
 
           {/* Message */}
           <div>
