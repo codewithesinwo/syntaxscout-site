@@ -1,571 +1,360 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
-
 import {
   FaUser,
   FaBell,
-  FaShieldAlt,
   FaCog,
   FaSave,
   FaTimes,
   FaCheck,
   FaExclamationTriangle,
-  FaInfoCircle,
   FaSpinner,
   FaCreditCard,
   FaDownload,
-  FaUndo,
-  FaPalette,
-  FaBrain,
-  FaGraduationCap,
   FaFileExport,
   FaTrashAlt,
-  FaEye,
-  FaTextHeight,
-  FaRunning,
 } from "react-icons/fa";
 
 export default function DashboardSetting() {
-  const { darkMode } = useTheme();
+  const [activeSection, setActiveSection] = useState("profile");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ text: "", type: "success" });
 
-  // Existing state (profile, privacy, notifications, account, coursePurchaseData) remains unchanged...
-  // ... (keep all your existing useState declarations)
+  /* ===================== STATES ===================== */
 
-  // NEW STATES
-  const [appearance, setAppearance] = useState({
-    theme: "system", // system, light, dark
-    accentColor: "teal", // teal, blue, purple, orange
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    bio: "",
   });
 
-  const [learningPrefs, setLearningPrefs] = useState({
-    dailyGoalMinutes: 60,
-    studyReminders: true,
-    reminderTime: "09:00",
-    preferredFormat: "video", // video, reading, interactive
-    autoPlayVideos: true,
-    subtitles: true,
+  const [notifications, setNotifications] = useState({
+    email: true,
+    push: false,
+    courseUpdates: true,
   });
 
-  const [subscription, setSubscription] = useState({
-    plan: "Premium Monthly",
-    status: "active",
-    nextBillingDate: "2026-02-01",
-    nextBillingAmount: 14.99,
-    paymentMethod: "Visa ending in 4242",
+  const [academic, setAcademic] = useState({
+    language: "English",
+    gradeView: "percentage",
+    attendanceAlerts: true,
+  });
+
+  const [account, setAccount] = useState({
+    twoFactorEnabled: false,
   });
 
   const [accessibility, setAccessibility] = useState({
-    fontSize: "medium", // small, medium, large
-    reducedMotion: false,
+    largeText: false,
     highContrast: false,
+    reduceMotion: false,
   });
 
-  // Updated sections list
-  const sections = [
-    { id: "profile", label: "Profile Settings", icon: FaUser },
-    { id: "privacy", label: "Privacy", icon: FaShieldAlt },
-    { id: "notifications", label: "Notifications", icon: FaBell },
-    { id: "appearance", label: "Appearance", icon: FaPalette },
-    { id: "learning", label: "Learning Preferences", icon: FaBrain },
-    { id: "account", label: "Account Security", icon: FaCog },
-    { id: "certificates", label: "Certificates", icon: FaGraduationCap },
-    { id: "course-purchase", label: "Courses & Billing", icon: FaCreditCard },
-    { id: "subscription", label: "Subscription", icon: FaCreditCard },
-    { id: "data", label: "Data & Privacy", icon: FaFileExport },
-    { id: "accessibility", label: "Accessibility", icon: FaEye },
+  const [subscription] = useState({
+    plan: "School Premium",
+    status: "Active",
+    nextBillingDate: "2026-02-01",
+    nextBillingAmount: 14.99,
+  });
+
+  const devices = [
+    { id: 1, name: "Chrome on Windows", location: "Lagos, NG", active: true },
+    { id: 2, name: "Mobile App", location: "Abuja, NG", active: false },
   ];
 
-  // ... keep your existing helpers: validateProfile, validateAccount, handleSave, Tooltip, renderToggle
+  /* ===================== SIDEBAR ===================== */
+
+  const sections = [
+    { id: "profile", label: "Profile", icon: FaUser },
+    { id: "notifications", label: "Notifications", icon: FaBell },
+    { id: "academic", label: "Academic Preferences", icon: FaCog },
+    { id: "account", label: "Account Security", icon: FaCog },
+    { id: "devices", label: "Devices & Sessions", icon: FaCog },
+    { id: "accessibility", label: "Accessibility", icon: FaCog },
+    { id: "subscription", label: "Subscription", icon: FaCreditCard },
+    { id: "data", label: "Data & Privacy", icon: FaFileExport },
+  ];
+
+  const editableSections = [
+    "profile",
+    "notifications",
+    "academic",
+    "account",
+    "accessibility",
+  ];
+
+  /* ===================== HELPERS ===================== */
+
+  function renderToggle(value, onChange) {
+    return (
+      <button
+        onClick={() => onChange(!value)}
+        className={`h-8 w-14 rounded-full flex items-center p-1 transition ${
+          value ? "bg-teal-600 justify-end" : "bg-gray-300 justify-start"
+        }`}
+      >
+        <span className="h-6 w-6 bg-white rounded-full shadow" />
+      </button>
+    );
+  }
+
+  function SectionCard({ title, subtitle, children }) {
+    return (
+      <section className="mb-6">
+        <h3 className="text-xl font-semibold">{title}</h3>
+        {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
+        <div className="mt-4 p-5 bg-white border rounded-lg">{children}</div>
+      </section>
+    );
+  }
+
+  function handleSave(section) {
+    setLoading(true);
+    setMessage({ text: "", type: "success" });
+
+    setTimeout(() => {
+      setLoading(false);
+      setMessage({ text: `${section} saved successfully`, type: "success" });
+      setTimeout(() => setMessage({ text: "", type: "success" }), 2500);
+    }, 800);
+  }
+
+  function handleCancel() {
+    setMessage({ text: "Changes discarded", type: "success" });
+    setTimeout(() => setMessage({ text: "", type: "success" }), 2000);
+  }
+
+  /* ===================== RENDER ===================== */
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={`p-6 mt-16 min-h-screen ${
-        darkMode ? "bg-black text-white" : "bg-gray-100 text-gray-900"
-      }`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="p-6 mt-16 min-h-screen bg-gray-100"
     >
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-10">Settings</h1>
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8">School Dashboard Settings</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar - Updated with new sections */}
-          <aside className="lg:col-span-1">
-            <div
-              className={`rounded-xl shadow-lg p-5 ${
-                darkMode ? "bg-neutral-900" : "bg-white"
-              }`}
-            >
-              <nav className="space-y-2">
-                {sections.map((section) => {
-                  const Icon = section.icon;
-                  return (
-                    <button
-                      key={section.id}
-                      onClick={() => setActiveSection(section.id)}
-                      className={`w-full flex items-center gap-4 px-5 py-3.5 rounded-lg font-medium transition-all ${
-                        activeSection === section.id
-                          ? "bg-teal-600 text-black shadow-md"
-                          : darkMode
-                          ? "hover:bg-neutral-800 text-gray-200"
-                          : "hover:bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      <Icon className="text-xl" />
-                      <span>{section.label}</span>
-                    </button>
-                  );
-                })}
-              </nav>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* SIDEBAR */}
+          <aside>
+            <div className="bg-white rounded-xl shadow p-4">
+              {sections.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={() => setActiveSection(s.id)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-md mb-1 ${
+                      activeSection === s.id
+                        ? "bg-teal-600 text-black font-semibold"
+                        : "hover:bg-gray-50"
+                    }`}
+                  >
+                    <Icon />
+                    {s.label}
+                  </button>
+                );
+              })}
             </div>
           </aside>
 
-          {/* Main Content */}
+          {/* CONTENT */}
           <main className="lg:col-span-3">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeSection}
-                initial={{ opacity: 0, x: 30 }}
+                initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                className={`rounded-xl shadow-lg p-8 ${
-                  darkMode ? "bg-neutral-900" : "bg-white"
-                }`}
+                exit={{ opacity: 0, x: -20 }}
+                className="bg-white rounded-xl shadow p-6"
               >
-                {/* Existing sections: profile, privacy, notifications, account, course-purchase remain unchanged */}
-
-                {/* NEW: Appearance */}
-                {activeSection === "appearance" && (
-                  <div>
-                    <h2 className="text-2xl font-semibold mb-6">Appearance</h2>
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium mb-3">
-                          Theme Preference
-                        </label>
-                        <select
-                          value={appearance.theme}
-                          onChange={(e) =>
-                            setAppearance({
-                              ...appearance,
-                              theme: e.target.value,
-                            })
-                          }
-                          className={`w-full px-4 py-2.5 border rounded-lg ${
-                            darkMode
-                              ? "bg-neutral-800 border-gray-600"
-                              : "bg-gray-50 border-gray-300"
-                          }`}
-                        >
-                          <option value="system">Follow System</option>
-                          <option value="light">Light Mode</option>
-                          <option value="dark">Dark Mode</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-3">
-                          Accent Color
-                        </label>
-                        <div className="grid grid-cols-4 gap-4">
-                          {["teal", "blue", "purple", "orange"].map((color) => (
-                            <button
-                              key={color}
-                              onClick={() =>
-                                setAppearance({
-                                  ...appearance,
-                                  accentColor: color,
-                                })
-                              }
-                              className={`h-12 rounded-lg border-4 transition-all ${
-                                appearance.accentColor === color
-                                  ? "border-white shadow-lg"
-                                  : "border-transparent"
-                              }`}
-                              style={{
-                                backgroundColor:
-                                  color === "teal"
-                                    ? "#0d9488"
-                                    : color === "blue"
-                                    ? "#2563eb"
-                                    : color === "purple"
-                                    ? "#9333ea"
-                                    : "#f97316",
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                {/* PROFILE */}
+                {activeSection === "profile" && (
+                  <SectionCard title="Profile">
+                    <input
+                      placeholder="Full name"
+                      className="w-full mb-3 px-4 py-2 border rounded"
+                      value={profile.name}
+                      onChange={(e) =>
+                        setProfile({ ...profile, name: e.target.value })
+                      }
+                    />
+                    <input
+                      placeholder="Email"
+                      className="w-full mb-3 px-4 py-2 border rounded"
+                      value={profile.email}
+                      onChange={(e) =>
+                        setProfile({ ...profile, email: e.target.value })
+                      }
+                    />
+                    <textarea
+                      placeholder="Bio"
+                      rows={3}
+                      className="w-full px-4 py-2 border rounded"
+                      value={profile.bio}
+                      onChange={(e) =>
+                        setProfile({ ...profile, bio: e.target.value })
+                      }
+                    />
+                  </SectionCard>
                 )}
 
-                {/* NEW: Learning Preferences */}
-                {activeSection === "learning" && (
-                  <div>
-                    <h2 className="text-2xl font-semibold mb-6">
-                      Learning Preferences
-                    </h2>
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">
-                          Daily Study Goal (minutes)
-                        </label>
-                        <input
-                          type="number"
-                          min="15"
-                          max="300"
-                          value={learningPrefs.dailyGoalMinutes}
-                          onChange={(e) =>
-                            setLearningPrefs({
-                              ...learningPrefs,
-                              dailyGoalMinutes: Number(e.target.value),
-                            })
-                          }
-                          className={`w-full px-4 py-2.5 border rounded-lg ${
-                            darkMode ? "bg-neutral-800" : "bg-gray-50"
-                          }`}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <span className="font-medium">
-                            Daily Study Reminders
-                          </span>
-                          <p className="text-sm text-gray-500">
-                            Get a nudge to meet your goal
-                          </p>
-                        </div>
-                        {renderToggle(learningPrefs.studyReminders, (v) =>
-                          setLearningPrefs({
-                            ...learningPrefs,
-                            studyReminders: v,
+                {/* NOTIFICATIONS */}
+                {activeSection === "notifications" && (
+                  <SectionCard title="Notifications">
+                    {Object.entries(notifications).map(([key, value]) => (
+                      <div key={key} className="flex justify-between mb-3">
+                        <span className="capitalize">{key}</span>
+                        {renderToggle(value, (v) =>
+                          setNotifications({
+                            ...notifications,
+                            [key]: v,
                           })
                         )}
                       </div>
+                    ))}
+                  </SectionCard>
+                )}
 
-                      {learningPrefs.studyReminders && (
+                {/* ACADEMIC */}
+                {activeSection === "academic" && (
+                  <SectionCard title="Academic Preferences">
+                    <select
+                      className="w-full mb-3 px-4 py-2 border rounded"
+                      value={academic.language}
+                      onChange={(e) =>
+                        setAcademic({ ...academic, language: e.target.value })
+                      }
+                    >
+                      <option>English</option>
+                      <option>French</option>
+                      <option>Spanish</option>
+                    </select>
+
+                    <select
+                      className="w-full mb-3 px-4 py-2 border rounded"
+                      value={academic.gradeView}
+                      onChange={(e) =>
+                        setAcademic({ ...academic, gradeView: e.target.value })
+                      }
+                    >
+                      <option value="percentage">Percentage</option>
+                      <option value="letter">Letter Grade</option>
+                    </select>
+
+                    <div className="flex justify-between">
+                      <span>Attendance Alerts</span>
+                      {renderToggle(academic.attendanceAlerts, (v) =>
+                        setAcademic({ ...academic, attendanceAlerts: v })
+                      )}
+                    </div>
+                  </SectionCard>
+                )}
+
+                {/* ACCOUNT */}
+                {activeSection === "account" && (
+                  <SectionCard title="Account Security">
+                    <div className="flex justify-between">
+                      <span>Two-Factor Authentication</span>
+                      {renderToggle(account.twoFactorEnabled, (v) =>
+                        setAccount({ twoFactorEnabled: v })
+                      )}
+                    </div>
+                  </SectionCard>
+                )}
+
+                {/* DEVICES */}
+                {activeSection === "devices" && (
+                  <SectionCard title="Devices & Sessions">
+                    {devices.map((d) => (
+                      <div key={d.id} className="flex justify-between mb-3">
                         <div>
-                          <label className="block text-sm font-medium mb-2">
-                            Reminder Time
-                          </label>
-                          <input
-                            type="time"
-                            value={learningPrefs.reminderTime}
-                            onChange={(e) =>
-                              setLearningPrefs({
-                                ...learningPrefs,
-                                reminderTime: e.target.value,
-                              })
-                            }
-                            className={`px-4 py-2.5 border rounded-lg ${
-                              darkMode ? "bg-neutral-800" : "bg-gray-50"
-                            }`}
-                          />
-                        </div>
-                      )}
-
-                      <div>
-                        <label className="block text-sm font-medium mb-3">
-                          Preferred Content Format
-                        </label>
-                        <select
-                          value={learningPrefs.preferredFormat}
-                          onChange={(e) =>
-                            setLearningPrefs({
-                              ...learningPrefs,
-                              preferredFormat: e.target.value,
-                            })
-                          }
-                          className={`w-full px-4 py-2.5 border rounded-lg ${
-                            darkMode
-                              ? "bg-neutral-800 border-gray-600"
-                              : "bg-gray-50 border-gray-300"
-                          }`}
-                        >
-                          <option value="video">Video Lessons</option>
-                          <option value="reading">Reading & Text</option>
-                          <option value="interactive">
-                            Interactive Exercises
-                          </option>
-                        </select>
-                      </div>
-
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span>Auto-play next video</span>
-                          {renderToggle(learningPrefs.autoPlayVideos, (v) =>
-                            setLearningPrefs({
-                              ...learningPrefs,
-                              autoPlayVideos: v,
-                            })
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span>Always show subtitles</span>
-                          {renderToggle(learningPrefs.subtitles, (v) =>
-                            setLearningPrefs({ ...learningPrefs, subtitles: v })
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* NEW: Certificates */}
-                {activeSection === "certificates" && (
-                  <div>
-                    <h2 className="text-2xl font-semibold mb-6">
-                      Certificates & Achievements
-                    </h2>
-                    <div className="grid gap-6 md:grid-cols-2">
-                      {coursePurchaseData.purchasedCourses
-                        .filter((c) => c.completed)
-                        .map((course) => (
-                          <div
-                            key={course.id}
-                            className={`p-6 rounded-xl border ${
-                              darkMode
-                                ? "bg-neutral-800 border-gray-700"
-                                : "bg-gray-50 border-gray-300"
-                            }`}
-                          >
-                            <div className="flex justify-between items-center mb-4">
-                              <h4 className="font-bold text-lg">
-                                {course.title}
-                              </h4>
-                              <FaGraduationCap className="text-3xl text-teal-500" />
-                            </div>
-                            <p className="text-sm opacity-80 mb-4">
-                              Completed on {new Date().toLocaleDateString()}
-                            </p>
-                            <button className="w-full bg-teal-600 hover:bg-teal-500 text-black font-medium py-3 rounded-lg flex items-center justify-center gap-2">
-                              <FaDownload /> Download Certificate (PDF)
-                            </button>
+                          <div className="font-medium">{d.name}</div>
+                          <div className="text-sm text-gray-500">
+                            {d.location}
                           </div>
-                        ))}
-                      {coursePurchaseData.purchasedCourses.filter(
-                        (c) => c.completed
-                      ).length === 0 && (
-                        <p className="text-center col-span-2 py-10 text-gray-500">
-                          No certificates yet. Complete a course to earn one!
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {/* NEW: Subscription */}
-                {activeSection === "subscription" && (
-                  <div>
-                    <h2 className="text-2xl font-semibold mb-6">
-                      Subscription
-                    </h2>
-                    <div className="space-y-6">
-                      <div
-                        className={`p-6 rounded-xl ${
-                          darkMode ? "bg-neutral-800" : "bg-gray-50"
-                        }`}
-                      >
-                        <div className="flex justify-between items-center mb-4">
-                          <div>
-                            <h3 className="text-xl font-bold">
-                              {subscription.plan}
-                            </h3>
-                            <p className="text-sm text-gray-500">
-                              Status:{" "}
-                              <span className="text-green-500 font-medium">
-                                {subscription.status}
-                              </span>
-                            </p>
-                          </div>
-                          <span className="text-3xl font-bold">
-                            ${subscription.nextBillingAmount}
-                          </span>
                         </div>
-                        <p className="text-sm mb-4">
-                          Next billing: {subscription.nextBillingDate}
-                        </p>
-                        <p className="text-sm mb-6">
-                          Payment: {subscription.paymentMethod}
-                        </p>
-                        <div className="flex gap-4">
-                          <button className="flex-1 bg-teal-600 hover:bg-teal-500 text-black py-3 rounded-lg font-medium">
-                            Update Payment Method
+                        {d.active ? (
+                          <span className="text-teal-600">Current</span>
+                        ) : (
+                          <button className="text-red-500 text-sm">
+                            Sign out
                           </button>
-                          <button className="flex-1 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white py-3 rounded-lg font-medium transition">
-                            Cancel Subscription
-                          </button>
-                        </div>
+                        )}
                       </div>
-                    </div>
-                  </div>
+                    ))}
+                  </SectionCard>
                 )}
 
-                {/* NEW: Data & Privacy */}
-                {activeSection === "data" && (
-                  <div>
-                    <h2 className="text-2xl font-semibold mb-6">
-                      Data & Privacy
-                    </h2>
-                    <div className="space-y-6">
-                      <button className="w-full text-left p-5 rounded-lg border border-gray-600 hover:bg-neutral-800 transition">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h4 className="font-medium">
-                              Export My Learning Data
-                            </h4>
-                            <p className="text-sm text-gray-500">
-                              Download all your progress, notes, and activity
-                            </p>
-                          </div>
-                          <FaDownload className="text-xl" />
-                        </div>
-                      </button>
-
-                      <button className="w-full text-left p-5 rounded-lg border border-red-600 hover:bg-red-950 transition">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h4 className="font-medium text-red-500">
-                              Delete My Account
-                            </h4>
-                            <p className="text-sm text-gray-500">
-                              Permanently remove your account and all data
-                            </p>
-                          </div>
-                          <FaTrashAlt className="text-xl text-red-500" />
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* NEW: Accessibility */}
+                {/* ACCESSIBILITY */}
                 {activeSection === "accessibility" && (
-                  <div>
-                    <h2 className="text-2xl font-semibold mb-6">
-                      Accessibility
-                    </h2>
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium mb-3">
-                          Font Size
-                        </label>
-                        <select
-                          value={accessibility.fontSize}
-                          onChange={(e) =>
-                            setAccessibility({
-                              ...accessibility,
-                              fontSize: e.target.value,
-                            })
-                          }
-                          className={`w-full px-4 py-2.5 border rounded-lg ${
-                            darkMode
-                              ? "bg-neutral-800 border-gray-600"
-                              : "bg-gray-50 border-gray-300"
-                          }`}
-                        >
-                          <option value="small">Small</option>
-                          <option value="medium">Medium</option>
-                          <option value="large">Large</option>
-                        </select>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <span>Reduce motion</span>
-                          <Tooltip content="Disables non-essential animations">
-                            <FaInfoCircle className="text-gray-500" />
-                          </Tooltip>
-                        </div>
-                        {renderToggle(accessibility.reducedMotion, (v) =>
+                  <SectionCard title="Accessibility">
+                    {Object.entries(accessibility).map(([k, v]) => (
+                      <div key={k} className="flex justify-between mb-3">
+                        <span className="capitalize">{k}</span>
+                        {renderToggle(v, (val) =>
                           setAccessibility({
                             ...accessibility,
-                            reducedMotion: v,
+                            [k]: val,
                           })
                         )}
                       </div>
-
-                      <div className="flex items-center justify-between">
-                        <span>High contrast mode</span>
-                        {renderToggle(accessibility.highContrast, (v) =>
-                          setAccessibility({
-                            ...accessibility,
-                            highContrast: v,
-                          })
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                    ))}
+                  </SectionCard>
                 )}
 
-                {/* Save/Cancel Buttons - shown only for sections that need saving */}
-                {(activeSection === "profile" ||
-                  activeSection === "privacy" ||
-                  activeSection === "notifications" ||
-                  activeSection === "appearance" ||
-                  activeSection === "learning" ||
-                  activeSection === "account" ||
-                  activeSection === "accessibility") && (
-                  <div className="flex justify-end gap-4 mt-10 pt-8 border-t">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                {/* SUBSCRIPTION */}
+                {activeSection === "subscription" && (
+                  <SectionCard title="Subscription">
+                    <p className="font-semibold">{subscription.plan}</p>
+                    <p>Status: {subscription.status}</p>
+                    <p>Next Billing: ${subscription.nextBillingAmount}</p>
+                  </SectionCard>
+                )}
+
+                {/* DATA */}
+                {activeSection === "data" && (
+                  <SectionCard title="Data & Privacy">
+                    <button className="w-full mb-3 p-3 border rounded flex justify-between">
+                      Export My Data <FaDownload />
+                    </button>
+                    <button className="w-full p-3 border border-red-500 text-red-600 rounded flex justify-between">
+                      Delete Account <FaTrashAlt />
+                    </button>
+                  </SectionCard>
+                )}
+
+                {/* ACTIONS */}
+                {editableSections.includes(activeSection) && (
+                  <div className="flex justify-end gap-3 mt-6 border-t pt-4">
+                    <button
                       onClick={handleCancel}
-                      disabled={loading}
-                      className={`px-8 py-3 rounded-lg font-medium flex items-center gap-2 ${
-                        darkMode
-                          ? "bg-gray-700 hover:bg-gray-600"
-                          : "bg-gray-200 hover:bg-gray-300"
-                      }`}
+                      className="px-5 py-2 bg-gray-200 rounded"
                     >
                       <FaTimes /> Cancel
-                    </motion.button>
-
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    </button>
+                    <button
                       onClick={() => handleSave(activeSection)}
                       disabled={loading}
-                      className={`px-8 py-3 rounded-lg font-medium flex items-center gap-2 ${
-                        loading
-                          ? "bg-gray-500"
-                          : "bg-teal-600 hover:bg-teal-500 text-black"
-                      }`}
+                      className="px-5 py-2 bg-teal-600 rounded flex items-center gap-2"
                     >
                       {loading ? (
                         <FaSpinner className="animate-spin" />
                       ) : (
                         <FaSave />
                       )}
-                      {loading ? "Saving..." : "Save Changes"}
-                    </motion.button>
+                      Save
+                    </button>
                   </div>
                 )}
 
-                {/* Feedback Message */}
-                <AnimatePresence>
-                  {message.text && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className={`mt-6 p-4 rounded-lg flex items-center gap-3 text-lg font-medium ${
-                        message.type === "success"
-                          ? "bg-teal-100 text-teal-800 border border-teal-300"
-                          : "bg-red-100 text-red-800 border border-red-300"
-                      }`}
-                    >
-                      {message.type === "success" ? (
-                        <FaCheck />
-                      ) : (
-                        <FaExclamationTriangle />
-                      )}
-                      {message.text}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                {/* MESSAGE */}
+                {message.text && (
+                  <div className="mt-4 p-3 bg-teal-100 text-teal-800 rounded flex gap-2">
+                    <FaCheck /> {message.text}
+                  </div>
+                )}
               </motion.div>
             </AnimatePresence>
           </main>
